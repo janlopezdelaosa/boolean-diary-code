@@ -1,0 +1,6 @@
+{
+	"appId": "com.example.app",
+	"appName": "boolean-diary",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}

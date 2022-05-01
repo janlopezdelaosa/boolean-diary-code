@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Suspense, useState } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
+import DataViewer from "./DataViewer";
 
-function App() {
+import { config, Page } from "./defs";
+import Header from "./Header";
+import Settings from "./Settings";
+
+const App = () => {
+  const [page, setPage] = useState<Page>("settings");
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        suspense: true,
+      },
+    },
+  });
+  console.log(JSON.stringify(config));
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <QueryClientProvider client={queryClient}>
+        <Header page={page} setPage={setPage} />
+        <Suspense fallback={<p>loading data</p>}>
+          {page === "days" ? <DataViewer /> : <Settings />}
+        </Suspense>
+      </QueryClientProvider>
+    </>
   );
-}
+};
 
 export default App;
