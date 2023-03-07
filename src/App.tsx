@@ -1,5 +1,7 @@
 import { Suspense, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import DataViewer from "./DataViewer";
 
 import { config, Page } from "./defs";
@@ -21,10 +23,15 @@ const App = () => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <Header page={page} setPage={setPage} />
-        <Suspense fallback={<p>loading data</p>}>
-          {page === "days" ? <DataViewer /> : <Settings />}
-        </Suspense>
+        <BrowserRouter>
+          <Header page={page} setPage={setPage} />
+          <Suspense fallback={<p>loading data</p>}>
+            <Routes>
+              <Route path="/" element={<DataViewer />} />
+              <Route path="/days" element={<Settings />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
       </QueryClientProvider>
     </>
   );
